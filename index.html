@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Events Tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-auth.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js"></script>
+    <link href="https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/leaflet.markercluster.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.Default.css"
+      rel="stylesheet"
+    />
+    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/auth.js"></script>
+    <script src="./assets/js/map.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar sticky-top navbar-expand-md bg-dark py-1">
+        <span class="navbar-brand text-info font-weight-bold" href="#"><i class="fab fa-etsy"></i></span>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto w-100 d-flex justify-content-around">
+            <li class="nav-item">
+              <a class="nav-link nav-menu" href="#"><i class="fas fa-home"></i> &nbsp; Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-menu" href="#signin-content"><i class="fas fa-list"></i> &nbsp; My Tracker</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link m-1 p-1 float-left" href="#" id="signin">
+                <i class="fas fa-sign-in-alt"></i> &nbsp; Sign In</a
+              >
+              <a class="nav-link m-1 p-1 float-right" href="#" id="signup">
+                <i class="fas fa-user-plus"></i> &nbsp; Sign Up</a
+              >
+            </li>
+            <li class="nav-item dropdown" id="signout" style="display: none">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" name="signout" href="#"><i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out</a>
+                <a class="dropdown-item" name="github" href="https://github.com/charmata/events-tracker" target="_blank"
+                  ><i class="fab fa-github"></i>&nbsp; Github</a
+                >
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" name="about" href="#"><i class="fas fa-info-circle"></i>&nbsp; About</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="jumbotron text-center py-5 mb-0">
+        <div class="row mt-4 mx-0">
+          <div class="column col-3"></div>
+          <div class="column col-6 input-group">
+            <input class="form-control" id="event-search" type="text" placeholder="Search for events" />
+            <div class="input-group-append">
+              <span id="search" class="input-group-text bg-info"
+                ><i id="fonticon-search" class="fas fa-search fa-fw"></i
+              ></span>
+            </div>
+          </div>
+          <div class="column col-3"></div>
+        </div>
+        <div class="row mt-4 mx-0">
+          <div class="column col-1"></div>
+          <div id="search-suggest" class="column col-10 d-flex justify-content-around">
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nE">Raptors</button>
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nE">Maple Leafs</button>
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nJ">Jazz</button>
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nJ">Metal</button>
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nE">WWE</button>
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nn">Harry Potter</button>
+            <button class="btn btn-custom btn-info text-light" data-category="KZFzniwnSyZfZ7v7nE">Blue Jays</button>
+          </div>
+          <div class="column col-1"></div>
+        </div>
+      </div>
+      <div class="row mx-0 pt-3">
+        <div class="column col-2"></div>
+        <div class="column col-8">
+          <form class="d-flex justify-content-around">
+            <div class="form-group">
+              <select class="form-control" id="cityList">
+                <option>Toronto</option>
+                <option>Vancouver</option>
+                <option>New York</option>
+                <option>Chicago</option>
+                <option>Boston</option>
+                <option>Calgary</option>
+                <option>Montreal</option>
+                <option>Miami</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="date" class="form-control" id="start-date" />
+            </div>
+            <div class="form-group">
+              <select class="form-control" id="category-list">
+                <option value="KZFzniwnSyZfZ7v7nE">Sports</option>
+                <option value="KZFzniwnSyZfZ7v7nJ">Concerts</option>
+                <option value="KZFzniwnSyZfZ7v7na">Arts and Theatre</option>
+                <option value="KnvZfZ7vA1n">Family</option>
+                <option value="KZFzniwnSyZfZ7v7nn">Film</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-info text-light" id="btn-search">
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="column col-2"></div>
+      </div>
+
+      <div class="row mt-2 mx-0">
+        <div class="column col-1"></div>
+        <div class="column col-10">
+          <table class="table table-sm table-info table-striped" id="event-details-list">
+            <thead>
+              <tr class="bg-dark text-info">
+                <th scope="col" colspan="2">Event</th>
+                <th scope="col">Location</th>
+                <th scope="col">Schedule</th>
+                <th scope="col">Price Range</th>
+                <th scope="col">Status</th>
+                <th scope="col" style="display:none;"></th>
+              </tr>
+            </thead>
+            <tbody id="event-details"></tbody>
+          </table>
+          <nav>
+            <ul class="pagination">
+              <li class="page-item disabled">
+                <a class="page-link bg-info text-light" href="#" id="previous-page">Previous</a>
+              </li>
+              <li class="page-item disabled">
+                <a class="page-link bg-info text-light" href="#" id="next-page">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="column col-1"></div>
+      </div>
+
+      <div id="signin-content" class="row my-4 mx-0" style="display:none;">
+        <div class="column col-1"></div>
+        <div class="column col-10">
+          <div class="card">
+            <div class="card-header bg-dark">
+              <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item active">
+                  <a class="nav-link active" data-toggle="tab" id="events-list" href="#tab1">My Events</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" id="events-map" href="#tab2">Map</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                  <table class="table table-sm table-info mb-0 table-striped" id="saved-events-list">
+                    <thead>
+                      <tr class="bg-dark text-info">
+                        <th scope="col" colspan="2">Event</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Schedule</th>
+                        <th scope="col">Price Range</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="saved-events"></tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="tab2">
+                  <div id="saved-events-map" style="width: 70vw; height: 50vw" class="d-flex m-auto"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column col-1"></div>
+      </div>
+      <div class="modal fade" id="modal-signin">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-bottom-0 pb-0 text-center">
+              <h4 class="modal-title w-100 text-info">Sign In</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="input-group">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-info">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" id="signin-email" type="email" placeholder="Email Address" />
+                </div>
+                <div class="input-group mt-4">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-info">
+                      <i class="fas fa-key"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" id="signin-password" type="password" placeholder="Password" />
+                </div>
+                <div class="d-flex w-100 justify-content-between mt-3">
+                  <button type="button" class="btn btn-modal mt-2" id="btn-signin">Sign In</button>
+                  <h5 id="invalid-credentials" class="text-center pt-3 text-danger"></h5>
+                  <button type="button" class="btn btn-modal mt-2" id="btn-signin-cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="modal-signup">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-bottom-0 pb-0 text-center">
+              <h4 class="modal-title w-100 text-info">Sign Up</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="input-group">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-info">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" id="signup-email" type="email" placeholder="Email Address" />
+                </div>
+                <div class="input-group mt-4">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-info">
+                      <i class="far fa-user"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" id="signup-name" type="text" placeholder="Full Name" />
+                </div>
+                <div class="input-group mt-4">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-info">
+                      <i class="fas fa-key"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" id="signup-password" type="password" placeholder="Password" />
+                </div>
+                <div class="input-group mt-4">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-info">
+                      <i class="fas fa-key"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" id="repeat-password" type="password" placeholder="Repeat Password" />
+                </div>
+                <div class="d-flex w-100 justify-content-between mt-3">
+                  <button type="button" class="btn btn-modal mt-2 px-1" id="btn-signup">Sign Up</button>
+                  <h5 id="invalid-input" class="text-center pt-3 text-danger"></h5>
+                  <button type="button" class="btn btn-modal mt-2 px-1" id="btn-signup-cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <footer class="footer mt-auto pt-4 w-100 text-center fixed-bottom">
+      <span class="text-muted">Chris//Rezwan//Shyam &copy</span>
+    </footer> -->
+  </body>
+</html>

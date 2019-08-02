@@ -1,0 +1,121 @@
+* {
+  font-family: "Exo 2", sans-serif;
+}
+.container-fluid {
+  padding: 0;
+}
+
+.btn-custom {
+  width: 150px;
+  background: linear-gradient(rgba(23, 162, 184, 0.5), rgba(23, 162, 184, 0.9));
+}
+
+.navbar {
+  border-bottom: 2px solid #17a2b8 !important;
+}
+
+.jumbotron {
+  border-radius: 0;
+  background: url("../images/action-athletes-audience.jpg");
+  background-position: center center;
+  border-bottom: 1px solid #17a2b8;
+}
+
+.nav-menu,
+#signin,
+#signup,
+#navbarDropdown {
+  color: #17a2b8 !important;
+}
+
+#signin,
+#signup {
+  color: #17a2b8 !important;
+  border: 2px solid #17a2b8 !important;
+  border-radius: 10%;
+  font-size: 0.9rem;
+}
+
+.nav-menu:hover {
+  box-shadow: 2px 2px 2px #17a2b8 !important;
+  font-weight: bold;
+}
+
+#signin:hover,
+#signup:hover {
+  box-shadow: none;
+  font-weight: bold;
+}
+
+#fonticon-search {
+  color: #f8f9fa !important;
+  cursor: pointer;
+  width: 1;
+  background-color: #17a2b8 !important;
+}
+
+#events-map,
+#events-list {
+  background-color: #bee5eb;
+  color: #17a2b8;
+}
+
+#events-list.active,
+#events-map.active {
+  background-color: white;
+  color: #17a2b8;
+}
+
+.page-item.disabled .page-link {
+  background-color: #17a2b89e !important;
+}
+
+.btn-modal {
+  color: #bee5eb;
+  background-color: #17a2b8 !important;
+  box-shadow: 1px 1px 1px #000;
+  border-radius: 0;
+}
+
+.btn-modal:hover {
+  box-shadow: none;
+}
+
+.btn:focus,
+.btn:active,
+.page-link:focus,
+.page-link:active {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.marker-popup {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: #17a2b8 !important;
+  font-size: 1rem;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #17a2b8 !important;
+  color: #f8f9fa !important;
+}
+
+table a:hover {
+  text-decoration: none;
+}
+
+.modal-content {
+  box-shadow: 1px 1px 1px #000;
+  border-radius: 0;
+}
+
+#signup-email:focus,
+#signup-name:focus,
+#signup-password:focus,
+#repeat-password:focus,
+#signin-email:focus,
+#signin-password:focus,
+.close {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
